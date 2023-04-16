@@ -1,0 +1,156 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
+    <title>Hotel Omega</title>
+</head>
+
+<body>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
+
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+            font-family: 'Lato', sans-serif;
+        }
+
+        .container {
+            padding: 15px 20px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px 15px;
+            font-weight: bold;
+            border: none;
+            border-bottom: 2px solid black;
+            font-size: 25px;
+            transition: .2s linear;
+        }
+
+        .name {
+            margin-top: 10px;
+        }
+
+        input:focus,
+        input:active {
+            outline-style: none;
+            border-bottom: 3px solid blueviolet;
+
+        }
+
+        .number {
+            position: relative;
+        }
+
+        h1 {
+            padding-left: 10px;
+            padding-bottom: 20px;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .placebtn {
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: black;
+            color: white;
+            left: 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-evenly;
+        }
+
+        .placebtn .bill,
+        .placebtn input {
+            flex-basis: 50%;
+        }
+
+        .placebtn .bill {
+            font-size: 20px;
+            font-weight: bolder;
+        }
+
+        .hide {
+            display: none;
+        }
+
+        img {
+            border-radius: 20px;
+            width: 100px;
+        }
+        .itemimg{
+            display: grid;
+            place-items: center;
+            padding: 10px;
+        }
+        h1{
+            text-align: center;
+        }
+    </style>
+
+
+    <div class="container">
+        <form method="post" name="google-sheet">
+            <div class="itemimg"><img src="../veg bhuna.jpeg" alt=""></div>
+            <h1>Veg Bhuna</h1>
+            <div class="name">
+                <input type="number" name="tabel" id="" placeholder="Enter Table Number">
+            </div>
+            <div class="name">
+                <input type="number" name="quntity" id="Quntity" placeholder="Enter Quntity">
+            </div>
+            <input type="text" name="item" id="item" class="hide" value="Veg Bhuna">
+            <input type="text" name="datetime" id="datetime" class="hide">
+            <input type="text" name="bill" id="billdisplay" class="hide">
+
+            <div class="placebtn">
+                <div class="bill" id="bill"><i class="uil uil-rupee-sign rupeeicon"></i>0</div>
+                <input type="submit" value="ORDER" id="submit">
+            </div>
+
+        </form>
+    </div>
+    <script>
+        const qnt = document.querySelector('#Quntity');
+        const bill = document.querySelector('#bill');
+        const displaybill = document.querySelector('#billdisplay');
+        const submit = document.querySelector('#submit');
+
+        let date = new Date();
+        document.querySelector('#datetime').value = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} time:${date.getHours()}:${date.getMinutes()}`;
+
+        qnt.addEventListener("input", () => {
+            let total = eval(qnt.value * 80);
+            bill.innerHTML = `<i class="uil uil-rupee-sign rupeeicon"> ${total}`;
+            displaybill.value = `${total} rs`;
+        })
+
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbwWYY9zNNJkFbcA1itIpOwn7K7JHA-RJj4fH2Zu6uwiBJMkldPyyY748Bi6AE1C2Mbq/exec'
+        const form = document.forms['google-sheet']
+
+        form.addEventListener('submit', e => {
+            e.preventDefault()
+            submit.style.backgroundColor = "green";
+            submit.style.color = "white";
+            fetch(scriptURL, { method: 'POST', body: new FormData(form) })
+                .then(response => {
+                    window.location.replace("../confirm.html")
+                })
+                .catch(error => console.error('Error!', error.message))
+        })
+
+    </script>
+</body>
+
+</html>
